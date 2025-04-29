@@ -1,5 +1,5 @@
 #include "Tablero.h"
-#include "C:\Users\Laura\OneDrive\Escritorio\PruebaAna\freeglut.h"
+#include "freeglut.h"
 #include <iostream>
 
 Tablero::Tablero() : turnoBlancas(true), seleccionX(-1), seleccionY(-1) //constructor tablero con inicializacion del turno blanco (empiezan ellas) 
