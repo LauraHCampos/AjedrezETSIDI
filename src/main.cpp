@@ -6,7 +6,7 @@
 #include "Peon.h"
 #include "Pieza.h"
 #include <cmath>
-#include "C:\Users\Laura\OneDrive\Escritorio\PruebaAna\freeglut.h"
+#include "freeglut.h"
 #include "Tablero.h"
 
 Tablero* tablero;
@@ -22,8 +22,8 @@ void pantalla(int w, int h)
 {
     glMatrixMode(GL_PROJECTION); //definicion sist coord. 
     glLoadIdentity();
-    gluOrtho2D(0, 5, 5, 0); //limites de la proyeccion (el tablero ser· de 5x5)
-    glViewport(0, 0, w, h); //ajuste al nuevo tamaÒo de la pantalla (w de ancho y h de alto)
+    gluOrtho2D(0, 5, 5, 0); //limites de la proyeccion (el tablero ser√° de 5x5)
+    glViewport(0, 0, w, h); //ajuste al nuevo tama√±o de la pantalla (w de ancho y h de alto)
 }
 
 void mouse(int button, int state, int x, int y) //interaccion con el raton
@@ -42,7 +42,7 @@ int main(int argc, char** argv)
 {
     glutInit(&argc, argv);
     glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB);
-    glutInitWindowSize(600, 600); //tamaÒo inicial ventana en pixeles
+    glutInitWindowSize(600, 600); //tama√±o inicial ventana en pixeles
     glutCreateWindow("MiniChess Baby 2D"); //titulo de la ventana
 
     tablero = new Tablero(); //nuevo objeto (puntero global)
