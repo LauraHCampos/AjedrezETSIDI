@@ -6,6 +6,12 @@
 #include "Caballo.h"
 #include "Peon.h"
 
+enum EstadoJuego {
+    NORMAL,
+    JAQUE,
+    JAQUE_MATE
+};
+
 class Tablero 
 {
 private:
@@ -18,7 +24,11 @@ public:
     ~Tablero(); //destructor
 
     void dibujar(); //dibujar el tablero y las piezas
-    void click(float x, float y); //control del raton al hacer clic para el movimiento de las piezas
+    EstadoJuego click(float x, float y); //control del raton al hacer clic para el movimiento de las piezas
+
+    bool estaEnJaque(bool turnoBlanco);
+    bool esJaqueMate(bool turnoBlanco);
+
 };
 
 
