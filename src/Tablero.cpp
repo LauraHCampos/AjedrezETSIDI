@@ -90,7 +90,7 @@ void Tablero::dibujar() //dibuja el tablero y las piezas
     }
 }
 
-void Tablero::click(float x, float y) 
+EstadoJuego Tablero::click(float x, float y) 
 {
     int j = static_cast<int>(x);
     int i = static_cast<int>(y);
@@ -117,4 +117,125 @@ void Tablero::click(float x, float y)
         }
         seleccionX = seleccionY = -1; //deja de seleccionar
     }
+    
+     if (esJaqueMate(!turnoBlancas))
+    {
+        cout<<"Jaque mate"<< endl;
+        return JAQUE_MATE;
+    }
+
+    if (estaEnJaque(!turnoBlancas))
+    {
+        cout << "Esta en Jaque" << endl;
+        return JAQUE;
+    }
+
+    else
+    {
+        cout << "Esta en Normal" << endl;
+        return NORMAL;
+    }
+}
+
+
+bool Tablero::estaEnJaque(bool turnoBlanco) {// Devuelve true si el rey del jugador en turno está amenazado
+    int reyX = -1, reyY = -1;
+
+    // Encontrar al rey del jugador actual
+    for (int i = 0; i < 5; ++i) {
+        for (int j = 0; j < 5; ++j) //recorriendo el tablero 
+        {
+            Pieza* p = casillas[i][j];
+            if (p && p->getTipo() == "R" && p->getColor() == turnoBlanco) // si es el rey y es la pieza blanca
+            {
+                reyX = i; //guarda en reyX la posicion de i
+                reyY = j; //guarda en reyY la posicion de j
+                //posicion del rey
+            }
+        }
+    }
+
+    if (reyX == -1 || reyY == -1) return false; //valores no validos
+
+    // Revisar si alguna pieza enemiga puede atacarlo
+    for (int i = 0; i < 5; ++i) {
+        for (int j = 0; j < 5; ++j) { //recorre el tablero
+            Pieza* p = casillas[i][j];
+            if (p && p->getColor() != turnoBlanco) //si es del turno opuesto
+            {
+                if (p->movimientoValido(reyX, reyY, casillas)) //si se puede mover a la casilla en la que esta el rey
+                    return true; //esta en jaque 
+            }
+        }
+    }
+
+    return false; 
+}
+
+
+bool Tablero::esJaqueMate(bool turnoBlanco) {
+    if (!estaEnJaque(turnoBlanco)) return false; //si no esta en jaque no puede hacer jaque_mate
+
+    for (int i = 0; i < 5; ++i) {
+        for (int j = 0; j < 5; ++j) { //recorriendo el tablero 
+            Pieza* p = casillas[i][j];
+            if (p && p->getColor() == turnoBlanco) { //si hay una pieza y es del turno correspondiente 
+                int fromX = i, fromY = j; //se guarda la posicion de la pieza
+
+                for (int x = 0; x < 5; ++x) {
+                    for (int y = 0; y < 5; ++y) { //vuelve a recorrer el tablero 
+                        if (p->movimientoValido(x, y, casillas)) { //si puede moverse 
+                            // Simula el posible movimiento
+                            Pieza* destino = casillas[x][y];
+                            casillas[x][y] = p;
+                            casillas[fromX][fromY] = nullptr;
+                            p->setPos(x, y); //actualiza la posicion interna
+
+                            // Buscar la nueva posición del rey tras mover
+                            int reyX = -1, reyY = -1;
+                            if (p->getTipo() == "R") { //si la pieza que se mueve es el rey 
+                                // guarda su nueva posicion
+                                reyX = x; 
+                                reyY = y;
+                            }
+                            else { //si no lo fuera
+                                for (int a = 0; a < 5; ++a) {
+                                    for (int b = 0; b < 5; ++b) { //se busca al rey por el tablero
+                                        Pieza* r = casillas[a][b];
+                                        if (r && r->getTipo() == "R" && r->getColor() == turnoBlanco) {
+                                            //guarda su posicion
+                                            reyX = a;
+                                            reyY = b;
+                                        }
+                                    }
+                                }
+                            }
+
+                            // Comprobar si el rey sigue en jaque
+                            bool sigueEnJaque = false; //inicializamos la variable a false
+                            for (int a = 0; a < 5 && !sigueEnJaque; ++a) {
+                                for (int b = 0; b < 5 && !sigueEnJaque; ++b) { //recorriendo el tablero
+                                    Pieza* atacante = casillas[a][b];
+                                    if (atacante && atacante->getColor() != turnoBlanco && atacante->movimientoValido(reyX, reyY, casillas)) { //si hay una pieza, del color contrario y puede atacar al rey
+                                        sigueEnJaque = true; //sigue en jaque (posible jaque_mate)
+                                    }
+                                }
+                            }
+
+                            // Deshacer el movimiento que hemos simulado 
+                            casillas[fromX][fromY] = p;
+                            casillas[x][y] = destino;
+                            p->setPos(fromX, fromY); //vuelve a la posicion en la que estaba antes de la simulacion y se vuelve a repetir el bucle hasta comprobar todos los movimientos posibles
+
+                            if (!sigueEnJaque) { //logra salir del estado jaque 
+                                return false; // hay al menos un movimiento legal
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    return true; // No hay movimientos legales para que el rey escape del jaque, por lo que es jaque mate
 }
