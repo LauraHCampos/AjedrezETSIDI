@@ -43,8 +43,35 @@ void Tablero::dibujar() //dibuja el tablero y las piezas
             else //si no en un color oscuro
                 glColor3f(0.3f, 0.3f, 0.3f);
 
+            //Colores a los movimientos 
+
+            if (i == seleccionX && j == seleccionY)
+            {
+                if (turnoBlancas) //si es blanca imprime la casilla seleccionada de un color morado claro
+                    glColor3f(0.9f, 0.7f, 1.0f);
+                else //si es negra imprime la casilla seleccionada de un color morado oscuro
+                    glColor3f(0.3f, 0.1f, 0.4f);
+            }
+            
+            else if (seleccionX != -1 && seleccionY != -1 && casillas[seleccionX][seleccionY] && casillas[seleccionX][seleccionY]->movimientoValido(i, j, casillas))
+            {
+                if (turnoBlancas) //si es blanca imprime la casilla seleccionada de un color verde claro
+                    glColor3f(0.6f, 0.8f, 0.7f);
+                else //si es negra imprime la casilla seleccionada de un color verde oscuro
+                    glColor3f(0.17f, 0.4f, 0.3f);
+            }
+
             //dibujo de los cuadrados de las casillas
             glBegin(GL_QUADS);
+            glVertex2f(j, i);
+            glVertex2f(j + 1, i);
+            glVertex2f(j + 1, i + 1);
+            glVertex2f(j, i + 1);
+            glEnd();
+
+            //dibujo de lineas en los cuadrados de las casillas 
+            glColor3f(0.0f, 0.0f, 0.0f);
+            glBegin(GL_LINE_LOOP);
             glVertex2f(j, i);
             glVertex2f(j + 1, i);
             glVertex2f(j + 1, i + 1);
