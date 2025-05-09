@@ -9,7 +9,23 @@
 #include "freeglut.h"
 #include "Tablero.h"
 
+using namespace std;
+
 Tablero* tablero;
+
+void cambiarProyeccion(int w, int h) {
+    glMatrixMode(GL_PROJECTION);
+    glLoadIdentity();
+
+    if (estadoActual == MENU_PRINCIPAL || estadoActual == MENU_MODO_JUEGO || estadoActual == MENU_FINAL) {
+        gluOrtho2D(-1.0, 1.0, -1.0, 1.0); // Menú
+    }
+    else {
+        gluOrtho2D(0, 5, 5, 0); // Juego 5x5
+    }
+
+    glViewport(0, 0, w, h);
+}
 
 void dibuja() 
 {
