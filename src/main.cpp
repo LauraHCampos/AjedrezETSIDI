@@ -18,16 +18,19 @@ void dibuja()
     glutSwapBuffers();
 }
 
-void pantalla(int w, int h) 
+/*void pantalla(int w, int h) 
 {
     glMatrixMode(GL_PROJECTION); //definicion sist coord. 
     glLoadIdentity();
     gluOrtho2D(0, 5, 5, 0); //limites de la proyeccion (el tablero será de 5x5)
     glViewport(0, 0, w, h); //ajuste al nuevo tamaño de la pantalla (w de ancho y h de alto)
-}
+}*/
 
 void mouse(int button, int state, int x, int y) //interaccion con el raton
 {
+    if (estadoActual == MENU_PRINCIPAL || estadoActual == MENU_MODO_JUEGO || estadoActual == MENU_FINAL) {
+    clickMouse(button, state, x, y);
+}
     if (button == GLUT_LEFT_BUTTON && state == GLUT_DOWN) {
         int w = glutGet(GLUT_WINDOW_WIDTH); //ancho de la ventana
         int h = glutGet(GLUT_WINDOW_HEIGHT); //alto de la ventana 
@@ -51,6 +54,9 @@ int main(int argc, char** argv)
     glutDisplayFunc(dibuja);
     glutReshapeFunc(pantalla);
     glutMouseFunc(mouse);
+    /*glutDisplayFunc(display); //glutDisplayFunc(dibuja);        //Cambiar el glutDisplayFunc(dibuja) por una función display() que dibuje según un estadoActual (MENU, JUEGO, etc.).
+    glutMouseFunc(clickMouse); //glutReshapeFunc(pantalla);
+    glutReshapeFunc(cambiarProyeccion);*/
 
     glClearColor(0, 0, 0, 1); //color de fondo negro
 
