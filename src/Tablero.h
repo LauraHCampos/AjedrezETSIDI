@@ -12,7 +12,14 @@ enum EstadoJuego {
     JAQUE_MATE
 };
 
-class Tablero 
+struct Movimiento {
+    int origenX;
+    int origenY;
+    int destinoX;
+    int destinoY;
+};
+
+class Tablero
 {
 private:
     Pieza* casillas[5][5]; //tablero de 5x5 
@@ -28,8 +35,6 @@ public:
 
     bool estaEnJaque(bool turnoBlanco);
     bool esJaqueMate(bool turnoBlanco);
-
+    int evaluarTablero();
+    EstadoJuego moverIA();
 };
-
-
-
