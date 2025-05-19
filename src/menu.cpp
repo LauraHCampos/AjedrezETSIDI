@@ -105,17 +105,17 @@ void mostrarMenu() {
     // 1. Proyección centrada (para -1.0 a 1.0)
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
-    gluOrtho2D(-1.0, 1.0, -1.0, 1.0);  // sistema de coordenadas usado en los botones
+    gluOrtho2D(-1.0, 1.0, -1.0, 1.0);  
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
 
     // 2. Dibujar imagen de fondo
     glEnable(GL_TEXTURE_2D);
     glBindTexture(GL_TEXTURE_2D, ETSIDI::getTexture("imagenes/FondoAjedrez.png").id);
-    glDisable(GL_LIGHTING);  // desactivar luz para evitar efectos raros
+    glDisable(GL_LIGHTING);  
 
     glBegin(GL_QUADS);
-    glColor3f(1.0f, 1.0f, 1.0f); // sin tinte
+    glColor3f(1.0f, 1.0f, 1.0f); 
     glTexCoord2f(0, 1); glVertex2f(-1.0f, -1.0f); // abajo izquierda
     glTexCoord2f(1, 1); glVertex2f(1.0f, -1.0f);  // abajo derecha
     glTexCoord2f(1, 0); glVertex2f(1.0f, 1.0f);   // arriba derecha
@@ -123,7 +123,7 @@ void mostrarMenu() {
     glEnd();
 
     glDisable(GL_TEXTURE_2D);
-    glEnable(GL_LIGHTING);  // opcional si usarás luz luego
+    glEnable(GL_LIGHTING);  
 
     // 3. Título con sombra
     glColor3f(0.0f, 0.0f, 0.0f);  // sombra negra
@@ -156,7 +156,7 @@ void mostrarMenuModos() {
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
 
-    // 2. Fondo opcional (puedes usar otra imagen si quieres)
+    // 2. Fondo opcional 
     glEnable(GL_TEXTURE_2D);
     glBindTexture(GL_TEXTURE_2D, ETSIDI::getTexture("imagenes/FondoAjedrez.png").id);
     glDisable(GL_LIGHTING);
