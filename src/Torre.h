@@ -5,8 +5,9 @@
 class Torre : public Pieza //clase Torre derivada de Pieza
 {
 public:
-    Torre(int x, int y, bool color) : Pieza(x, y, color) {} //constructor específico
+    Torre(int x, int y, bool color) : Pieza(x, y, color) {} //constructor especifico
     bool movimientoValido(int destX, int destY, Pieza* tablero[5][5]); //devuelve si el movimiento es valido
-    string getTipo() { return "T"; } //Devuelve una letra T para identificarlo
+    bool puedeatacar(int destX, int destY, class Pieza* tablero[5][5]); //comprueba si se puede comer al rey
+    string getTipo() { return "Torre"; } //Devuelve una letra T para identificarlo
+    int getValor() const { return 5; } //devuelve un valor de 5
 };
-
