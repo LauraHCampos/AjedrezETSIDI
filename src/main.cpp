@@ -8,6 +8,7 @@
 #include <cmath>
 #include "freeglut.h"
 #include "Tablero.h"
+#include "menu.h"
 
 using namespace std;
 
