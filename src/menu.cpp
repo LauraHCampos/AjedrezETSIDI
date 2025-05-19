@@ -18,7 +18,11 @@ struct Boton {
         glDisable(GL_LIGHTING); 
 
         // Sombra
-        glColor3f(0.2f, 0.2f, 0.2f);
+        glColor3f(
+            min(r + 0.2f, 1.0f),            //ponemos min para no pasarle el valor maximo del color (1,0) ya que es el color del boton
+            min(g + 0.2f, 1.0f),
+            min(b + 0.2f, 1.0f)
+        );
         glBegin(GL_QUADS);
         glVertex2f(x + 0.02f, y - 0.02f);
         glVertex2f(x + ancho + 0.02f, y - 0.02f);
@@ -96,8 +100,6 @@ Boton botonesTipo[2] = {
     {-0.6f, -0.1f, 1.2f, 0.2f, "      GARDEN"}
 
 };
-
-
 
 void mostrarMenu() {
     glClear(GL_COLOR_BUFFER_BIT);
@@ -275,6 +277,19 @@ void clickMouse(int button, int state, int x, int y) {
         }
 
     }
+    /*else if (button == GLUT_LEFT_BUTTON && state == GLUT_DOWN && estadoActual == MENU_TIPO) {
+        float xf = (float)x / glutGet(GLUT_WINDOW_WIDTH) * 2.0f - 1.0f;
+        float yf = 1.0f - (float)y / glutGet(GLUT_WINDOW_HEIGHT) * 2.0f;
+
+        for (auto& boton : botonesTipo) {
+            if (xf >= boton.x && xf <= boton.x + boton.ancho &&
+                yf >= boton.y && yf <= boton.y + boton.alto) {
+                boton.accion();  // Aquí ejecuta la acción asignada
+                glutPostRedisplay();
+                return;
+            }
+        }
+    }*/ //Para unir el último menú con el tablero
 }
 
 
