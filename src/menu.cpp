@@ -7,15 +7,15 @@ using namespace std;
 
 EstadoApp estadoActual = MENU_PRINCIPAL;
 
+
 struct Boton {
     float x, y, ancho, alto;
     const char* texto;
     void (*accion)();
 
-   
     void dibujar(float r, float g, float b) {
         glDisable(GL_TEXTURE_2D);
-        glDisable(GL_LIGHTING); // <--- Esto es CLAVE para que los colores planos funcionen
+        glDisable(GL_LIGHTING); 
 
         // Sombra
         glColor3f(0.2f, 0.2f, 0.2f);
@@ -44,18 +44,18 @@ struct Boton {
             ++c;
         }
 
-        glEnable(GL_LIGHTING); // Vuelve a activar iluminación si se usará después
+        glEnable(GL_LIGHTING); 
     }
 
 };
 
 void iniciarJuegoVsMaquina() {
-    estadoActual = JUEGO_VS_MAQUINA;
+    estadoActual = MENU_MODO_JUEGO;
     cout << "Modo Jugador vs Máquina (no implementado todavía)" << endl;
 }
 
 void iniciarJuegoVsJugador() {
-    estadoActual = JUEGO_VS_JUGADOR;
+    estadoActual = MENU_MODO_JUEGO;
     cout << "Modo Jugador vs Jugador activado" << endl;
 }
 
@@ -63,11 +63,40 @@ void salir() {
     exit(0);
 }
 
+void iniciarmodo1() {
+    estadoActual = MENU_TIPO;
+    cout << "Modo clasico activado" << endl;
+   
+}
+
+void iniciarmodo2() {
+    estadoActual = MENU_TIPO;
+    cout << "Modo ETSIDI activado" << endl;
+}
+
+void iniciarmodo3() {
+    estadoActual = MENU_TIPO;
+    cout << "Modo Rey Leon activado" << endl;
+}
+
 Boton botones[3] = {
     {-0.6f, 0.2f, 1.2f, 0.2f, "1. Jugador vs Maquina", iniciarJuegoVsMaquina},
     {-0.6f, -0.1f, 1.2f, 0.2f, "2. Jugador vs Jugador", iniciarJuegoVsJugador},
     {-0.15f, -0.5f, 0.3f, 0.15f, " Salir", salir}
 };
+
+Boton botonesModos[3] = {
+    {-0.6f, 0.2f, 1.2f, 0.2f, "      Modo Clasico",iniciarmodo1},
+    {-0.6f, -0.1f, 1.2f, 0.2f, "      Modo ETSIDI",iniciarmodo2},
+    {-0.6f, -0.4f, 1.2f, 0.2f, "      Modo Rey Leon",iniciarmodo3}
+};
+
+Boton botonesTipo[2] = {
+    {-0.6f, 0.2f, 1.2f, 0.2f, "      BABY"},
+    {-0.6f, -0.1f, 1.2f, 0.2f, "      GARDEN"}
+
+};
+
 
 
 void mostrarMenu() {
@@ -117,6 +146,103 @@ void mostrarMenu() {
 
     glFlush();
 }
+void mostrarMenuModos() {
+    glClear(GL_COLOR_BUFFER_BIT);
+
+    // 1. Proyección centrada
+    glMatrixMode(GL_PROJECTION);
+    glLoadIdentity();
+    gluOrtho2D(-1.0, 1.0, -1.0, 1.0);
+    glMatrixMode(GL_MODELVIEW);
+    glLoadIdentity();
+
+    // 2. Fondo opcional (puedes usar otra imagen si quieres)
+    glEnable(GL_TEXTURE_2D);
+    glBindTexture(GL_TEXTURE_2D, ETSIDI::getTexture("imagenes/FondoAjedrez.png").id);
+    glDisable(GL_LIGHTING);
+
+    glBegin(GL_QUADS);
+    glColor3f(1.0f, 1.0f, 1.0f);
+    glTexCoord2f(0, 1); glVertex2f(-1.0f, -1.0f);
+    glTexCoord2f(1, 1); glVertex2f(1.0f, -1.0f);
+    glTexCoord2f(1, 0); glVertex2f(1.0f, 1.0f);
+    glTexCoord2f(0, 0); glVertex2f(-1.0f, 1.0f);
+    glEnd();
+
+    glDisable(GL_TEXTURE_2D);
+    glEnable(GL_LIGHTING);
+
+    // 3. Título del menú
+    glColor3f(0.0f, 0.0f, 0.0f);  // sombra negra
+    glRasterPos2f(-0.3f, 0.72f);
+    const char* sombra = "Selecciona Modo de Juego";
+    for (const char* c = sombra; *c; ++c)
+        glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_24, *c);
+
+    glColor3f(1.0f, 1.0f, 0.6f);  // texto claro
+    glRasterPos2f(-0.32f, 0.75f);
+    const char* titulo = "Selecciona Modo de Juego";
+    for (const char* c = titulo; *c; ++c)
+        glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_24, *c);
+
+    // 4. Dibujar los 3 botones
+    // Botón Modo 1
+    botonesModos[0].dibujar(0.0f, 0.6f, 0.8f); // azul cielo
+    // Botón Modo 2
+    botonesModos[1].dibujar(0.3f, 0.8f, 0.3f); // verde
+    // Botón Modo 3
+    botonesModos[2].dibujar(0.8f, 0.2f, 0.2f); // rojo
+
+    glFlush();
+}
+
+void mostrarMenuTipo() {
+    glClear(GL_COLOR_BUFFER_BIT);
+
+    // 1. Proyección centrada
+    glMatrixMode(GL_PROJECTION);
+    glLoadIdentity();
+    gluOrtho2D(-1.0, 1.0, -1.0, 1.0);
+    glMatrixMode(GL_MODELVIEW);
+    glLoadIdentity();
+
+    // 2. Fondo opcional 
+    glEnable(GL_TEXTURE_2D);
+    glBindTexture(GL_TEXTURE_2D, ETSIDI::getTexture("imagenes/FondoAjedrez.png").id);
+    glDisable(GL_LIGHTING);
+
+    glBegin(GL_QUADS);
+    glColor3f(1.0f, 1.0f, 1.0f);
+    glTexCoord2f(0, 1); glVertex2f(-1.0f, -1.0f);
+    glTexCoord2f(1, 1); glVertex2f(1.0f, -1.0f);
+    glTexCoord2f(1, 0); glVertex2f(1.0f, 1.0f);
+    glTexCoord2f(0, 0); glVertex2f(-1.0f, 1.0f);
+    glEnd();
+
+    glDisable(GL_TEXTURE_2D);
+    glEnable(GL_LIGHTING);
+
+    // 3. Título del menú
+    glColor3f(0.0f, 0.0f, 0.0f);  // sombra negra
+    glRasterPos2f(-0.3f, 0.72f);
+    const char* sombra = "Selecciona Tipo de juego:";
+    for (const char* c = sombra; *c; ++c)
+        glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_24, *c);
+
+    glColor3f(1.0f, 1.0f, 0.6f);  // texto claro
+    glRasterPos2f(-0.32f, 0.75f);
+    const char* titulo = "Selecciona Tipo de juego";
+    for (const char* c = titulo; *c; ++c)
+        glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_24, *c);
+
+    // 4. Dibujar los 3 botones
+    // Botón Tipo 1
+    botonesTipo[0].dibujar(0.0f, 0.6f, 0.8f); // azul cielo
+    // Botón Tipo 2
+    botonesTipo[1].dibujar(0.3f, 0.8f, 0.3f); // verde
+
+    glFlush();
+}
 
 
 
@@ -128,26 +254,47 @@ void clickMouse(int button, int state, int x, int y) {
         for (auto& boton : botones) {
             if (xf >= boton.x && xf <= boton.x + boton.ancho &&
                 yf >= boton.y && yf <= boton.y + boton.alto) {
-                boton.accion();
+                boton.accion();  // Aquí ejecuta la acción asignada
                 glutPostRedisplay();
                 return;
             }
         }
+
+    }
+    else if (button == GLUT_LEFT_BUTTON && state == GLUT_DOWN && estadoActual == MENU_MODO_JUEGO) {
+        float xf = (float)x / glutGet(GLUT_WINDOW_WIDTH) * 2.0f - 1.0f;
+        float yf = 1.0f - (float)y / glutGet(GLUT_WINDOW_HEIGHT) * 2.0f;
+
+        for (auto& boton : botonesModos) {
+            if (xf >= boton.x && xf <= boton.x + boton.ancho &&
+                yf >= boton.y && yf <= boton.y + boton.alto) {
+                boton.accion();  // Aquí ejecuta la acción asignada
+                glutPostRedisplay();
+                return;
+            }
+        }
+
     }
 }
 
+
 void display() {
-    if (estadoActual == MENU_PRINCIPAL)
-        mostrarMenu();
-    else {
-        glClear(GL_COLOR_BUFFER_BIT);
-        glRasterPos2f(-0.3f, 0);
-        const char* mensaje = "(El juego ha comenzado)";
-        while (*mensaje) {
-            glutBitmapCharacter(GLUT_BITMAP_HELVETICA_18, *mensaje);
-            ++mensaje;
-        }
-        glFlush();
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+    switch (estadoActual) {
+    case MENU_PRINCIPAL:
+        mostrarMenu();  
+        break;
+    case MENU_MODO_JUEGO:
+        mostrarMenuModos();  
+        break;
+
+    case MENU_TIPO:
+        mostrarMenuTipo();
+        break;
+
     }
+
     glutSwapBuffers();
 }
+
