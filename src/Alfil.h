@@ -7,5 +7,7 @@ class Alfil : public Pieza  //clase Alfil derivada de Pieza
 public:
     Alfil(int x, int y, bool color) : Pieza(x, y, color) {} //constructor posicion inicial y color
     bool movimientoValido(int destX, int destY, Pieza* tablero[5][5]); //se puede hacer ese movimiento?
-    string getTipo() { return "A"; } //letra que imprime en el tablero
+    bool puedeatacar(int destX, int destY, class Pieza* tablero[5][5]); //comprueba si se puede comer al rey
+    string getTipo() { return "Alfil"; } //letra que imprime en el tablero
+    int getValor() const { return 5; } //devuelve un valor de 5
 };
