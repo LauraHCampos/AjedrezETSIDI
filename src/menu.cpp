@@ -4,6 +4,7 @@
 #include "ETSIDI.h"
 
 using namespace std;
+extern Tablero* tablero;
 
 EstadoApp estadoActual = MENU_PRINCIPAL;
 TipoJuego tipoJuegoSeleccionado;
