@@ -13,6 +13,7 @@
 using namespace std;
 
 Tablero* tablero;
+bool tableroIniciado = false;
 
 void cambiarProyeccion(int w, int h) {
     glMatrixMode(GL_PROJECTION);
@@ -30,6 +31,17 @@ void cambiarProyeccion(int w, int h) {
 
 void dibuja() 
 {
+    if (estadoActual == MENU_PRINCIPAL || estadoActual == MENU_MODO_JUEGO || estadoActual == MENU_TIPO)
+    display();
+else {
+    if (!tableroIniciado) {
+        cout << "Configurando tablero..." << endl;
+        cout << "Tipo de juego: " << tipoJuegoSeleccionado << endl;
+        cout << "Modo de juego: " << modoJuegoSeleccionado << endl;
+        cout << "Tablero: " << tipoTableroSeleccionado << endl;
+
+        tableroIniciado = true;
+    }
     glClear(GL_COLOR_BUFFER_BIT);
     tablero->dibujar(); //dibuja el tablero
     glutSwapBuffers();
@@ -45,7 +57,7 @@ void dibuja()
 
 void mouse(int button, int state, int x, int y) //interaccion con el raton
 {
-    if (estadoActual == MENU_PRINCIPAL || estadoActual == MENU_MODO_JUEGO || estadoActual == MENU_FINAL) {
+    if (estadoActual == MENU_PRINCIPAL || estadoActual == MENU_MODO_JUEGO || estadoActual == MENU_TIPO) {
     clickMouse(button, state, x, y);
 }
     if (button == GLUT_LEFT_BUTTON && state == GLUT_DOWN) {
