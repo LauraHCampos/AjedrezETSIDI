@@ -2,6 +2,7 @@
 #include "freeglut.h"
 #include <iostream>
 #include <vector>
+#include "menu.h"
 
 Tablero::Tablero() : turnoBlancas(true), seleccionX(-1), seleccionY(-1) //constructor tablero con inicializacion del turno blanco (empiezan ellas) 
 {
