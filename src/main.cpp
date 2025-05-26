@@ -77,7 +77,7 @@ int main(int argc, char** argv)
     glutInitWindowSize(600, 600); //tamaño inicial ventana en pixeles
     glutCreateWindow("MiniChess Baby 2D"); //titulo de la ventana
 
-    tablero = new Tablero(); //nuevo objeto (puntero global)
+    //tablero = new Tablero(); //nuevo objeto (puntero global)
 
     //para que llame a las funciones al ser necesario (sin seguir el ordende linea a linea)
     glutDisplayFunc(dibuja);
