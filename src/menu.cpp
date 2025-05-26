@@ -18,7 +18,11 @@ struct Boton {
         glDisable(GL_LIGHTING); 
 
         // Sombra
-        glColor3f(0.2f, 0.2f, 0.2f);
+        glColor3f(
+        min(r + 0.2f, 1.0f),            //ponemos min para no pasarle el valor maximo del color (1,0) ya que es el color del boton
+        min(g + 0.2f, 1.0f),
+        min(b + 0.2f, 1.0f)
+        );        
         glBegin(GL_QUADS);
         glVertex2f(x + 0.02f, y - 0.02f);
         glVertex2f(x + ancho + 0.02f, y - 0.02f);
@@ -105,7 +109,7 @@ void mostrarMenu() {
     // 1. Proyección centrada (para -1.0 a 1.0)
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
-    gluOrtho2D(-1.0, 1.0, -1.0, 1.0);  // sistema de coordenadas usado en los botones
+    gluOrtho2D(-1.0, 1.0, -1.0, 1.0);  // sistema de coordenadas de los botones
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
 
@@ -115,7 +119,7 @@ void mostrarMenu() {
     glDisable(GL_LIGHTING);  // desactivar luz para evitar efectos raros
 
     glBegin(GL_QUADS);
-    glColor3f(1.0f, 1.0f, 1.0f); // sin tinte
+    glColor3f(1.0f, 1.0f, 1.0f); // sin color
     glTexCoord2f(0, 1); glVertex2f(-1.0f, -1.0f); // abajo izquierda
     glTexCoord2f(1, 1); glVertex2f(1.0f, -1.0f);  // abajo derecha
     glTexCoord2f(1, 0); glVertex2f(1.0f, 1.0f);   // arriba derecha
@@ -123,7 +127,7 @@ void mostrarMenu() {
     glEnd();
 
     glDisable(GL_TEXTURE_2D);
-    glEnable(GL_LIGHTING);  // opcional si usarás luz luego
+    glEnable(GL_LIGHTING); 
 
     // 3. Título con sombra
     glColor3f(0.0f, 0.0f, 0.0f);  // sombra negra
@@ -156,7 +160,7 @@ void mostrarMenuModos() {
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
 
-    // 2. Fondo opcional (puedes usar otra imagen si quieres)
+    // 2. Fondo
     glEnable(GL_TEXTURE_2D);
     glBindTexture(GL_TEXTURE_2D, ETSIDI::getTexture("imagenes/FondoAjedrez.png").id);
     glDisable(GL_LIGHTING);
@@ -206,7 +210,7 @@ void mostrarMenuTipo() {
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
 
-    // 2. Fondo opcional 
+    // 2. Fondo
     glEnable(GL_TEXTURE_2D);
     glBindTexture(GL_TEXTURE_2D, ETSIDI::getTexture("imagenes/FondoAjedrez.png").id);
     glDisable(GL_LIGHTING);
@@ -235,7 +239,7 @@ void mostrarMenuTipo() {
     for (const char* c = titulo; *c; ++c)
         glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_24, *c);
 
-    // 4. Dibujar los 3 botones
+    // 4. Dibujar los 2 botones
     // Botón Tipo 1
     botonesTipo[0].dibujar(0.0f, 0.6f, 0.8f); // azul cielo
     // Botón Tipo 2
@@ -266,7 +270,7 @@ void clickMouse(int button, int state, int x, int y) {
         float xf = (float)x / glutGet(GLUT_WINDOW_WIDTH) * 2.0f - 1.0f;
         float yf = 1.0f - (float)y / glutGet(GLUT_WINDOW_HEIGHT) * 2.0f;
 
-        for (auto& boton : botonesModos) {
+        for (auto& boton : botonesTipo) {
             if (xf >= boton.x && xf <= boton.x + boton.ancho &&
                 yf >= boton.y && yf <= boton.y + boton.alto) {
                 ETSIDI::play("sonidos/boton_click.wav");
