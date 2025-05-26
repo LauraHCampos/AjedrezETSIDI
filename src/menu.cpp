@@ -90,7 +90,23 @@ void iniciarmodo3() {
     estadoActual = MENU_TIPO;
     cout << "Modo Rey Leon activado" << endl;
 }
+void seleccionarGarden() {
+    tipoTableroSeleccionado = GARDEN;
+    estadoActual = (tipoJuegoSeleccionado == VS_MAQUINA) ? JUEGO_VS_MAQUINA : JUEGO_VS_JUGADOR;
+    cout << "Tablero GARDEN" << endl;
+    tablero = new Tablero();
+    glutPostRedisplay();
+   
+}
 
+void seleccionarbaby() {
+    tipoTableroSeleccionado = BABY;
+    estadoActual = (tipoJuegoSeleccionado == VS_MAQUINA) ? JUEGO_VS_MAQUINA : JUEGO_VS_JUGADOR;
+    cout << "Tablero KINDER" << endl;
+    tablero = new Tablero();
+    glutPostRedisplay();
+    
+}
 Boton botones[3] = {
     {-0.6f, 0.2f, 1.2f, 0.2f, "1. Jugador vs Maquina", iniciarJuegoVsMaquina},
     {-0.6f, -0.1f, 1.2f, 0.2f, "2. Jugador vs Jugador", iniciarJuegoVsJugador},
