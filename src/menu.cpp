@@ -6,7 +6,9 @@
 using namespace std;
 
 EstadoApp estadoActual = MENU_PRINCIPAL;
-
+TipoJuego tipoJuegoSeleccionado;
+ModoJuego modoJuegoSeleccionado;
+TipoTablero tipoTableroSeleccionado;
 
 struct Boton {
     float x, y, ancho, alto;
@@ -54,11 +56,13 @@ struct Boton {
 };
 
 void iniciarJuegoVsMaquina() {
+    tipoJuegoSeleccionado = VS_MAQUINA;
     estadoActual = MENU_MODO_JUEGO;
     cout << "Modo Jugador vs Máquina (no implementado todavía)" << endl;
 }
 
 void iniciarJuegoVsJugador() {
+    tipoJuegoSeleccionado = VS_JUGADOR;
     estadoActual = MENU_MODO_JUEGO;
     cout << "Modo Jugador vs Jugador activado" << endl;
 }
@@ -68,17 +72,20 @@ void salir() {
 }
 
 void iniciarmodo1() {
+    modoJuegoSeleccionado = CLASICO;
     estadoActual = MENU_TIPO;
     cout << "Modo clasico activado" << endl;
    
 }
 
 void iniciarmodo2() {
+    modoJuegoSeleccionado = ETSIDI_;
     estadoActual = MENU_TIPO;
     cout << "Modo ETSIDI activado" << endl;
 }
 
 void iniciarmodo3() {
+    modoJuegoSeleccionado = REY_PEON;
     estadoActual = MENU_TIPO;
     cout << "Modo Rey Leon activado" << endl;
 }
@@ -96,8 +103,8 @@ Boton botonesModos[3] = {
 };
 
 Boton botonesTipo[2] = {
-    {-0.6f, 0.2f, 1.2f, 0.2f, "      BABY"},
-    {-0.6f, -0.1f, 1.2f, 0.2f, "      GARDNER"}
+    {-0.6f, 0.2f, 1.2f, 0.2f, "      BABY", seleccionarbaby},
+    {-0.6f, -0.1f, 1.2f, 0.2f, "      GARDNER", seleccionarGarden}
 
 };
 
