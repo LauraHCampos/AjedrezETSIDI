@@ -10,7 +10,9 @@ enum EstadoApp {
     JUEGO_VS_MAQUINA,
     JUEGO_VS_JUGADOR
 };
-
+enum TipoJuego { VS_MAQUINA, VS_JUGADOR };
+enum ModoJuego { CLASICO, ETSIDI_, REY_PEON };
+enum TipoTablero { GARDEN, BABY };
 // Variable global que indica el estado actual
 extern EstadoApp estadoActual;
 
