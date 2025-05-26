@@ -18,11 +18,7 @@ struct Boton {
         glDisable(GL_LIGHTING); 
 
         // Sombra
-        glColor3f(
-            min(r + 0.2f, 1.0f),            //ponemos min para no pasarle el valor maximo del color (1,0) ya que es el color del boton
-            min(g + 0.2f, 1.0f),
-            min(b + 0.2f, 1.0f)
-        );
+        glColor3f(0.2f, 0.2f, 0.2f);
         glBegin(GL_QUADS);
         glVertex2f(x + 0.02f, y - 0.02f);
         glVertex2f(x + ancho + 0.02f, y - 0.02f);
@@ -97,9 +93,11 @@ Boton botonesModos[3] = {
 
 Boton botonesTipo[2] = {
     {-0.6f, 0.2f, 1.2f, 0.2f, "      BABY"},
-    {-0.6f, -0.1f, 1.2f, 0.2f, "      GARDEN"}
+    {-0.6f, -0.1f, 1.2f, 0.2f, "      GARDNER"}
 
 };
+
+
 
 void mostrarMenu() {
     glClear(GL_COLOR_BUFFER_BIT);
@@ -107,17 +105,17 @@ void mostrarMenu() {
     // 1. Proyección centrada (para -1.0 a 1.0)
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
-    gluOrtho2D(-1.0, 1.0, -1.0, 1.0);  
+    gluOrtho2D(-1.0, 1.0, -1.0, 1.0);  // sistema de coordenadas usado en los botones
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
 
     // 2. Dibujar imagen de fondo
     glEnable(GL_TEXTURE_2D);
     glBindTexture(GL_TEXTURE_2D, ETSIDI::getTexture("imagenes/FondoAjedrez.png").id);
-    glDisable(GL_LIGHTING);  
+    glDisable(GL_LIGHTING);  // desactivar luz para evitar efectos raros
 
     glBegin(GL_QUADS);
-    glColor3f(1.0f, 1.0f, 1.0f); 
+    glColor3f(1.0f, 1.0f, 1.0f); // sin tinte
     glTexCoord2f(0, 1); glVertex2f(-1.0f, -1.0f); // abajo izquierda
     glTexCoord2f(1, 1); glVertex2f(1.0f, -1.0f);  // abajo derecha
     glTexCoord2f(1, 0); glVertex2f(1.0f, 1.0f);   // arriba derecha
@@ -125,7 +123,7 @@ void mostrarMenu() {
     glEnd();
 
     glDisable(GL_TEXTURE_2D);
-    glEnable(GL_LIGHTING);  
+    glEnable(GL_LIGHTING);  // opcional si usarás luz luego
 
     // 3. Título con sombra
     glColor3f(0.0f, 0.0f, 0.0f);  // sombra negra
@@ -158,7 +156,7 @@ void mostrarMenuModos() {
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
 
-    // 2. Fondo opcional 
+    // 2. Fondo opcional (puedes usar otra imagen si quieres)
     glEnable(GL_TEXTURE_2D);
     glBindTexture(GL_TEXTURE_2D, ETSIDI::getTexture("imagenes/FondoAjedrez.png").id);
     glDisable(GL_LIGHTING);
@@ -256,6 +254,22 @@ void clickMouse(int button, int state, int x, int y) {
         for (auto& boton : botones) {
             if (xf >= boton.x && xf <= boton.x + boton.ancho &&
                 yf >= boton.y && yf <= boton.y + boton.alto) {
+                ETSIDI::play("sonidos/boton_click.wav");
+                boton.accion();  // Aquí ejecuta la acción asignada
+                glutPostRedisplay();
+                return;
+            }
+        }
+
+    }
+    else if (button == GLUT_LEFT_BUTTON && state == GLUT_DOWN && estadoActual == MENU_TIPO) {
+        float xf = (float)x / glutGet(GLUT_WINDOW_WIDTH) * 2.0f - 1.0f;
+        float yf = 1.0f - (float)y / glutGet(GLUT_WINDOW_HEIGHT) * 2.0f;
+
+        for (auto& boton : botonesModos) {
+            if (xf >= boton.x && xf <= boton.x + boton.ancho &&
+                yf >= boton.y && yf <= boton.y + boton.alto) {
+                ETSIDI::play("sonidos/boton_click.wav");
                 boton.accion();  // Aquí ejecuta la acción asignada
                 glutPostRedisplay();
                 return;
@@ -270,6 +284,7 @@ void clickMouse(int button, int state, int x, int y) {
         for (auto& boton : botonesModos) {
             if (xf >= boton.x && xf <= boton.x + boton.ancho &&
                 yf >= boton.y && yf <= boton.y + boton.alto) {
+                ETSIDI::play("sonidos/boton_click.wav");
                 boton.accion();  // Aquí ejecuta la acción asignada
                 glutPostRedisplay();
                 return;
@@ -277,19 +292,6 @@ void clickMouse(int button, int state, int x, int y) {
         }
 
     }
-    /*else if (button == GLUT_LEFT_BUTTON && state == GLUT_DOWN && estadoActual == MENU_TIPO) {
-        float xf = (float)x / glutGet(GLUT_WINDOW_WIDTH) * 2.0f - 1.0f;
-        float yf = 1.0f - (float)y / glutGet(GLUT_WINDOW_HEIGHT) * 2.0f;
-
-        for (auto& boton : botonesTipo) {
-            if (xf >= boton.x && xf <= boton.x + boton.ancho &&
-                yf >= boton.y && yf <= boton.y + boton.alto) {
-                boton.accion();  // Aquí ejecuta la acción asignada
-                glutPostRedisplay();
-                return;
-            }
-        }
-    }*/ //Para unir el último menú con el tablero
 }
 
 
