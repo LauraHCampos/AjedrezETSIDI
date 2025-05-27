@@ -1,24 +1,29 @@
 #pragma once
-#ifndef MENU_H
-#define MENU_H
 
-// Enumeración para controlar en que estado está la aplicación
-enum EstadoApp {
+enum EstadoMenu {
     MENU_PRINCIPAL,
-    MENU_MODO_JUEGO,
-    MENU_TIPO,
-    JUEGO_VS_MAQUINA,
-    JUEGO_VS_JUGADOR
+    MENU_TIPO_AJEDREZ,
+    MENU_MODOS_ESPECIALES,
+    MOSTRAR_TABLERO
 };
-enum TipoJuego { VS_MAQUINA, VS_JUGADOR };
-enum ModoJuego { CLASICO, ETSIDI_, REY_PEON };
-enum TipoTablero { GARDEN, BABY };
-// Variable global que indica el estado actual
-extern EstadoApp estadoActual;
 
-// Funciones públicas del menú
-void mostrarMenu();
-void clickMouse(int button, int state, int x, int y);
-void display();
+class Menu {
+private:
+    int seleccion1 = 0;
+    int seleccion2 = 0;
+    int seleccion3 = 0;
+    EstadoMenu estadoActual = MENU_PRINCIPAL;
+    bool juegoIniciado = false;
 
-#endif
+public:
+    Menu();
+
+    void render();
+    void manejarInput(unsigned char key);
+    bool haIniciadoJuego() const;
+    EstadoMenu obtenerEstado() const;
+    int getSeleccion1() const;
+    int getSeleccion2() const;
+    int getSeleccion3() const;
+    void reiniciar();
+};
