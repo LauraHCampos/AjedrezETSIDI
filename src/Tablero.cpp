@@ -2,61 +2,63 @@
 #include "freeglut.h"
 #include <iostream>
 #include <vector>
-#include "menu.h"
 
-Tablero::Tablero() : turnoBlancas(true), seleccionX(-1), seleccionY(-1) //constructor tablero con inicializacion del turno blanco (empiezan ellas) 
+Tablero::Tablero(int s3) : turnoBlancas(true), seleccionX(-1), seleccionY(-1) //constructor tablero con inicializacion del turno blanco (empiezan ellas) 
 {
     for (int i = 0; i < 5; ++i) //bucle
         for (int j = 0; j < 5; ++j) //bucle dentro de bucle para la matriz del tablero
             casillas[i][j] = nullptr; //se inicializan en 0
 
+    //NUEVO
+  
+    if (s3 == 2) //BABY
+    {
 
-            //IF BABY
-            //posiciones iniciales de las piezas blancas
-    casillas[4][0] = new Torre(4, 0, true);
-    casillas[4][1] = new Caballo(4, 1, true);
-    casillas[4][2] = new Rey(4, 2, true);
-    casillas[4][3] = new Alfil(4, 3, true);
-    casillas[4][4] = new Reina(4, 4, true);
+        //posiciones iniciales de las piezas blancas
+        casillas[4][0] = new Torre(4, 0, true);
+        casillas[4][1] = new Caballo(4, 1, true);
+        casillas[4][2] = new Alfil(4, 2, true);
+        casillas[4][3] = new Reina(4, 3, true);
+        casillas[4][4] = new Rey(4, 4, true);
 
-    for (int j = 0; j < 5; j++)
-        casillas[3][j] = new Peon(3, j, true);
+        for (int j = 0; j < 5; j++)
+            casillas[3][j] = new Peon(3, j, true);
 
-    //posiciones iniciales de las piezas negras
-    casillas[0][0] = new Reina(0, 0, false);
-    casillas[0][1] = new Alfil(0, 1, false);
-    casillas[0][2] = new Rey(0, 2, false);
-    casillas[0][3] = new Caballo(0, 3, false);
-    casillas[0][4] = new Torre(0, 4, false);
+        //posiciones iniciales de las piezas negras
+        casillas[0][0] = new Rey(0, 0, false);
+        casillas[0][1] = new Reina(0, 1, false);
+        casillas[0][2] = new Alfil(0, 2, false);
+        casillas[0][3] = new Caballo(0, 3, false);
+        casillas[0][4] = new Torre(0, 4, false);
 
-    for (int j = 0; j < 5; j++)
-        casillas[1][j] = new Peon(1, j, false);
+        for (int j = 0; j < 5; j++)
+            casillas[1][j] = new Peon(1, j, false);
+    }
 
+    else if (s3 == 1) //GARDNER
+    {
+        // Piezas negras (fila 0)
+        casillas[0][0] = new Torre(0, 0, false);
+        casillas[0][1] = new Caballo(0, 1, false);
+        casillas[0][2] = new Alfil(0, 2, false);
+        casillas[0][3] = new Reina(0, 3, false);
+        casillas[0][4] = new Rey(0, 4, false);
 
-    //IF GARDNER
-    /*
-    // Piezas negras (fila 0)
-    casillas[0][0] = new Torre(0, 0, false);
-    casillas[0][1] = new Caballo(0, 1, false);
-    casillas[0][2] = new Alfil(0, 2, false);
-    casillas[0][3] = new Reina(0, 3, false);
-    casillas[0][4] = new Rey(0, 4, false);
+        // Peones negros (fila 1)
+        for (int j = 0; j < 5; ++j)
+            casillas[1][j] = new Peon(1, j, false);
 
-    // Peones negros (fila 1)
-    for (int j = 0; j < 5; ++j)
-        casillas[1][j] = new Peon(1, j, false);
+        // Peones blancos (fila 3)
+        for (int j = 0; j < 5; ++j)
+            casillas[3][j] = new Peon(3, j, true);
 
-    // Peones blancos (fila 3)
-    for (int j = 0; j < 5; ++j)
-        casillas[3][j] = new Peon(3, j, true);
-
-    // Piezas blancas (fila 4)
-    casillas[4][0] = new Torre(4, 0, true);
-    casillas[4][1] = new Caballo(4, 1, true);
-    casillas[4][2] = new Alfil(4, 2, true);
-    casillas[4][3] = new Reina(4, 3, true);
-    casillas[4][4] = new Rey(4, 4, true);
-    */
+        // Piezas blancas (fila 4)
+        casillas[4][0] = new Torre(4, 0, true);
+        casillas[4][1] = new Caballo(4, 1, true);
+        casillas[4][2] = new Alfil(4, 2, true);
+        casillas[4][3] = new Reina(4, 3, true);
+        casillas[4][4] = new Rey(4, 4, true);
+    }
 
 }
 
@@ -67,7 +69,7 @@ Tablero::~Tablero() //destructor (libera memoria)
             delete casillas[i][j];
 }
 
-void Tablero::dibujar() //dibuja el tablero y las piezas
+void Tablero::dibujar(int s2) //dibuja el tablero y las piezas
 {
     for (int i = 0; i < 5; i++) {
         for (int j = 0; j < 5; j++) { //recorrer casillas 
@@ -113,18 +115,45 @@ void Tablero::dibujar() //dibuja el tablero y las piezas
             glEnd();
 
             if (casillas[i][j]) {
-                //color de la spiezas (las blancas enr rojo y las negras en azul)
-                glColor3f(casillas[i][j]->getColor() ? 1.0f : 0.0f, 0.0f, casillas[i][j]->getColor() ? 0.0f : 1.0f);
-                glRasterPos2f(j + 0.4f, i + 0.4f); //posicion texto
-                //dibuja la inicial de cada tipo de pieza
-                string tipo = casillas[i][j]->getTipo();
-                glutBitmapCharacter(GLUT_BITMAP_HELVETICA_18, tipo[0]);
+                
+                //PONER FOTOS 
+                if (s2 == 1) //MODO CLASICO
+                {
+                    //color de las piezas (las blancas en rojo y las negras en azul)
+                    glColor3f(casillas[i][j]->getColor() ? 1.0f : 0.0f, 0.0f, casillas[i][j]->getColor() ? 0.0f : 1.0f);
+                    glRasterPos2f(j + 0.4f, i + 0.4f); //posicion texto
+                    //dibuja la inicial de cada tipo de pieza
+                    string tipo = casillas[i][j]->getTipo();
+                    glutBitmapCharacter(GLUT_BITMAP_HELVETICA_18, tipo[0]);
+                }
+
+                else if (s2 == 2) //MODO REY LEON
+                {
+                    //color de las piezas (las blancas en rojo y las negras en azul)
+                    glColor3f(casillas[i][j]->getColor() ? 1.0f : 0.0f, 0.0f, casillas[i][j]->getColor() ? 0.0f : 1.0f);
+                    glRasterPos2f(j + 0.4f, i + 0.4f); //posicion texto
+                    //dibuja la inicial de cada tipo de pieza
+                    string tipo = casillas[i][j]->getTipo();
+                    glutBitmapCharacter(GLUT_BITMAP_HELVETICA_18, tipo[0]);
+
+                }
+
+                else if (s2 == 3) //MODO ETSIDI
+                {
+                    //color de las piezas (las blancas en rojo y las negras en azul)
+                    glColor3f(casillas[i][j]->getColor() ? 1.0f : 0.0f, 0.0f, casillas[i][j]->getColor() ? 0.0f : 1.0f);
+                    glRasterPos2f(j + 0.4f, i + 0.4f); //posicion texto
+                    //dibuja la inicial de cada tipo de pieza
+                    string tipo = casillas[i][j]->getTipo();
+                    glutBitmapCharacter(GLUT_BITMAP_HELVETICA_18, tipo[0]);
+                }
+
             }
         }
     }
 }
 
-EstadoJuego Tablero::click(float x, float y)
+EstadoJuego Tablero::click(float x, float y, int s1)
 {
     int j = static_cast<int>(x);
     int i = static_cast<int>(y);
@@ -160,9 +189,9 @@ EstadoJuego Tablero::click(float x, float y)
             {
 
                 if (turnoBlancas)
-                    cout << "\t\t\tRey negro en Jaque Mate. Ganan blancas" << endl;
+                    cout << "\t\t\tRey negro en Jaque Mate. Ganan blancas. Pulse r para volver al menu inicial" << endl;
                 else
-                    cout << "Rey blanco en Jaque Mate. Ganan negras" << endl;
+                    cout << "Rey blanco en Jaque Mate. Ganan negras. Pulse r para volver al menu inicial" << endl;
 
                 return JAQUE_MATE;
             }
@@ -174,12 +203,17 @@ EstadoJuego Tablero::click(float x, float y)
                     cout << "\t\t\tRey negro en Jaque" << endl;
                 else
                     cout << "Rey blanco en Jaque" << endl;
-                // IF 2 JUGADORES
-                //turnoBlancas = !turnoBlancas; //cambio de turno
+                // IF 2 JUGADORES             
+                if (s1 == 2)
+                    turnoBlancas = !turnoBlancas; //cambio de turno
 
                 //IF IA
-                turnoBlancas = false;
-                moverIA(); // Llama a la IA para que juegue su turno negro
+                if (s1 == 1)
+                {
+                    turnoBlancas = false;
+                    moverIA(); // Llama a la IA para que juegue su turno negro
+                }
+
 
                 return JAQUE;
             }
@@ -192,12 +226,16 @@ EstadoJuego Tablero::click(float x, float y)
                 else
                     cout << "Rey blanco en Normal" << endl;
 
-                // IF 2 JUGADORES
-                //turnoBlancas = !turnoBlancas; //cambio de turno
+                //IF 2 JUGADORES
+                if (s1 == 2)
+                    turnoBlancas = !turnoBlancas; //cambio de turno
 
                 //IF IA
-                turnoBlancas = false;
-                moverIA(); // Llama a la IA para que juegue su turno negro
+                if (s1 == 1)
+                {
+                    turnoBlancas = false;
+                    moverIA(); // Llama a la IA para que juegue su turno negro
+                }
 
                 return NORMAL;
             }
@@ -211,6 +249,8 @@ EstadoJuego Tablero::click(float x, float y)
     
 }
 
+
+//HAY CAMBIOS DE LO DE PUEDEATACAR
 bool Tablero::estaEnJaque(bool turnoBlanco) {// Devuelve true si el rey del jugador en turno está amenazado
     int reyX = -1, reyY = -1;
 
@@ -313,6 +353,8 @@ bool Tablero::esJaqueMate(bool turnoBlanco) {
     return true; // No hay movimientos legales para que el rey escape del jaque, por lo que es jaque mate
 }
 
+//NUEVO
+
 int Tablero::evaluarTablero() {
     int valor = 0;
     for (int i = 0; i < 5; ++i) {
@@ -361,7 +403,7 @@ EstadoJuego Tablero::moverIA() {
     }
 
     if (movimientosPosibles.empty()) {
-        std::cout << "La IA no tiene movimientos legales. Ganan blancas" << std::endl;
+        std::cout << "La IA no tiene movimientos legales. Ganan blancas. Pulse r para volver al menu inicial" << std::endl;
         return JAQUE_MATE;
     }
 
@@ -412,7 +454,7 @@ EstadoJuego Tablero::moverIA() {
     std::cout << "IA mueve " << casillas[x][y]->getTipo() << " negro de (" << i << "," << j << ") a (" << x << "," << y << ")\n";
     if (esJaqueMate(turnoBlancas))
     {
-        cout << "Rey blanco en Jaque Mate. Ganan negras" << endl;
+        cout << "Rey blanco en Jaque Mate. Ganan negras. Pulse r para volver al menu inicial" << endl;
         return JAQUE_MATE;
     }
 
