@@ -8,6 +8,6 @@ public:
     Peon(int x, int y, bool color) : Pieza(x, y, color) {} //constructor con la posicion y el color
     bool movimientoValido(int destX, int destY, Pieza* tablero[5][5]); //llama a la funcion de movimeintos validos
     bool puedeatacar(int destX, int destY, class Pieza* tablero[5][5]); //comprueba si se puede comer al rey
-    string getTipo() { return "Peon"; } //imprime P en el tablero
+    string getTipo() { return "Peon"; } //devuelve el nombre de la pieza
     int getValor() const { return 1; } //devuelve un valor de 1
 };
