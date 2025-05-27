@@ -27,11 +27,11 @@ private:
     int seleccionX, seleccionY; //posicion de la pieza seleccionada a mover
 
 public:
-    Tablero(); //constructor
+    Tablero(int sel3); //constructor
     ~Tablero(); //destructor
 
-    void dibujar(); //dibujar el tablero y las piezas
-    EstadoJuego click(float x, float y); //control del raton al hacer clic para el movimiento de las piezas
+    void dibujar(int sel2); //dibujar el tablero y las piezas
+    EstadoJuego click(float x, float y, int sel1); //control del raton al hacer clic para el movimiento de las piezas
 
     bool estaEnJaque(bool turnoBlanco);
     bool esJaqueMate(bool turnoBlanco);
