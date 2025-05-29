@@ -581,6 +581,7 @@ EstadoJuego Tablero::moverIA() {
     }
 
     if (movimientosPosibles.empty()) {
+        ETSIDI::play("sonidos/Checkmate.mp3");
         std::cout << "La IA no tiene movimientos legales. Ganan blancas. Pulse r para volver al menu inicial" << std::endl;
         return JAQUE_MATE;
     }
