@@ -15,6 +15,50 @@ void renderTexto(float x, float y, const char* texto) {
 
 Menu::Menu() {}
 
+struct Boton {
+    float x, y, ancho, alto;
+    const char* texto;
+
+
+void dibujar(float r, float g, float b) {
+    glDisable(GL_TEXTURE_2D);
+    glDisable(GL_LIGHTING); 
+
+    // Sombra
+    glColor3f(
+        min(r + 0.2f, 1.0f),            //ponemos min para no pasarle el valor maximo del color (1,0) ya que es el color del boton
+        min(g + 0.2f, 1.0f),
+        min(b + 0.2f, 1.0f)
+    );
+    glBegin(GL_QUADS);
+    glVertex2f(x + 0.02f, y - 0.02f);
+    glVertex2f(x + ancho + 0.02f, y - 0.02f);
+    glVertex2f(x + ancho + 0.02f, y + alto - 0.02f);
+    glVertex2f(x + 0.02f, y + alto - 0.02f);
+    glEnd();
+
+    // Boton
+    glColor3f(r, g, b);
+    glBegin(GL_QUADS);
+    glVertex2f(x, y);
+    glVertex2f(x + ancho, y);
+    glVertex2f(x + ancho, y + alto);
+    glVertex2f(x, y + alto);
+    glEnd();
+
+    // Texto
+    glColor3f(0, 0, 0);
+    glRasterPos2f(x + ancho / 4, y + alto / 3);
+    const char* c = texto;
+    while (*c) {
+        glutBitmapCharacter(GLUT_BITMAP_HELVETICA_18, *c);
+        ++c;
+    }
+
+    glEnable(GL_LIGHTING); 
+}
+};
+
 void mostrarMenu() {
     glClear(GL_COLOR_BUFFER_BIT);
 
@@ -55,6 +99,23 @@ void mostrarMenu() {
         glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_24, *c);
 
 }
+
+Boton botones[3] = {
+    {-0.6f, 0.2f, 1.2f, 0.2f, "1. Jugador vs Maquina"},
+    {-0.6f, -0.1f, 1.2f, 0.2f, "2. Jugador vs Jugador"},
+    {-0.15f, -0.5f, 0.3f, 0.15f, " Salir"}
+};
+
+Boton botonesTipo[3] = {
+    {-0.6f, 0.2f, 1.2f, 0.2f, "     1. Modo Clasico"},
+    {-0.6f, -0.1f, 1.2f, 0.2f, "    2.  Modo Rey Leon"},
+    {-0.6f, -0.4f, 1.2f, 0.2f, "    3.  Modo ETSIDI"}
+};
+
+Boton botonesModos[2] = {
+    {-0.6f, 0.2f, 1.2f, 0.2f, "    1.  BABY"},
+    {-0.6f, -0.1f, 1.2f, 0.2f, "    2.  GARDEN"}
+};
 
 void mostrarMenuTipo() {
     glClear(GL_COLOR_BUFFER_BIT);
