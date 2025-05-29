@@ -2,6 +2,7 @@
 #include "freeglut.h"
 #include <iostream>
 #include <vector>
+#include "ETSIDI.h"
 
 Tablero::Tablero(int s3) : turnoBlancas(true), seleccionX(-1), seleccionY(-1) //constructor tablero con inicializacion del turno blanco (empiezan ellas) 
 {
@@ -71,30 +72,38 @@ Tablero::~Tablero() //destructor (libera memoria)
 
 void Tablero::dibujar(int s2) //dibuja el tablero y las piezas
 {
+
     for (int i = 0; i < 5; i++) {
         for (int j = 0; j < 5; j++) { //recorrer casillas 
            
+           
             if ((i + j) % 2 == 0) //si es par imprime la casilla de un color claro
-                glColor3f(0.82f, 0.729f, 0.647f); //glColor3f(0.9f, 0.9f, 0.9f);
+                glColor3f(0.82f, 0.729f, 0.647f); 
             else //si no en un color oscuro
-                glColor3f(0.1804f, 0.129f, 0.0902f); //glColor3f(0.3f, 0.3f, 0.3f);
+                glColor3f(0.694f, 0.47f, 0.329f); 
 
             //Colores a los movimientos 
 
+            //pieza seleccionada. Morados
             if (i == seleccionX && j == seleccionY)
             {
                 if (turnoBlancas) //si es blanca imprime la casilla seleccionada de un color morado claro
-                    glColor3f(0.653f, 0.625f, 0.77f);
+                    pintarmovimiento(0.653f, 0.625f, 0.77f, i, j);
+
                 else //si es negra imprime la casilla seleccionada de un color morado oscuro
-                    glColor3f(0.3f, 0.1f, 0.4f);
+                    pintarmovimiento(0.3f, 0.1f, 0.4f, i, j);
+                    
             }
             
+            //posibles movimientos. Verdes
             else if (seleccionX != -1 && seleccionY != -1 && casillas[seleccionX][seleccionY] && casillas[seleccionX][seleccionY]->movimientoValido(i, j, casillas))
             {
-                if (turnoBlancas) //si es blanca imprime la casilla seleccionada de un color verde claro
-                    glColor3f(0.615f, 0.757f, 0.514f); //glColor3f(0.6f, 0.8f, 0.7f);
-                else //si es negra imprime la casilla seleccionada de un color verde oscuro
-                    glColor3f(0.17f, 0.4f, 0.3f); //glColor3f(0.17f, 0.4f, 0.3f);
+                if (turnoBlancas) //si es blanca imprime la casilla de movimientos de un color verde claro
+                    pintarmovimiento(0.615f, 0.757f, 0.514f, i, j);
+
+                else //si es negra imprime la casilla de movimientos de un color verde oscuro
+                    pintarmovimiento(0.17f, 0.4f, 0.3f, i, j);
+
             }
 
             //dibujo de los cuadrados de las casillas
@@ -115,42 +124,210 @@ void Tablero::dibujar(int s2) //dibuja el tablero y las piezas
             glEnd();
 
             if (casillas[i][j]) {
-                
+
                 //PONER FOTOS 
                 if (s2 == 1) //MODO CLASICO
                 {
-                    //color de las piezas (las blancas en rojo y las negras en azul)
-                    glColor3f(casillas[i][j]->getColor() ? 1.0f : 0.0f, 0.0f, casillas[i][j]->getColor() ? 0.0f : 1.0f);
-                    glRasterPos2f(j + 0.4f, i + 0.4f); //posicion texto
-                    //dibuja la inicial de cada tipo de pieza
                     string tipo = casillas[i][j]->getTipo();
-                    glutBitmapCharacter(GLUT_BITMAP_HELVETICA_18, tipo[0]);
+                    bool color = casillas[i][j]->getColor();
+
+                    if (color == 1) // piezas blancas
+                    {
+                        if (tipo == "Peon")
+                            imprimirTextura("imagenes/pawnwhite.png", j, i);
+
+                        else if (tipo == "Alfil")
+                            imprimirTextura("imagenes/bishopwhite.png", j, i);
+
+
+                        else if (tipo == "Caballo")
+                            imprimirTextura("imagenes/horsewhite.png", j, i);
+
+                        else if (tipo == "Queen")
+                            imprimirTextura("imagenes/queenwhite.png", j, i);
+
+                        else if (tipo == "Rey")
+                            imprimirTextura("imagenes/kingwhite.png", j, i);
+
+                        else if (tipo == "Torre")
+                            imprimirTextura("imagenes/towerwhite.png", j, i);
+
+                    }
+
+                    if (color == 0) //piezas negras
+                    {
+                        if (tipo == "Peon")
+                            imprimirTextura("imagenes/pawnblack.png", j, i);
+
+                        else if (tipo == "Alfil")
+                            imprimirTextura("imagenes/bishopblack.png", j, i);
+
+                        else if (tipo == "Caballo")
+                            imprimirTextura("imagenes/horseblack.png", j, i);
+
+                        else if (tipo == "Queen")
+                            imprimirTextura("imagenes/queenblack.png", j, i);
+
+                        else if (tipo == "Rey")
+                            imprimirTextura("imagenes/kingblack.png", j, i);
+
+                        else if (tipo == "Torre")
+                            imprimirTextura("imagenes/towerblack.png", j, i);
+
+                    }
+
                 }
 
                 else if (s2 == 2) //MODO REY LEON
                 {
-                    //color de las piezas (las blancas en rojo y las negras en azul)
-                    glColor3f(casillas[i][j]->getColor() ? 1.0f : 0.0f, 0.0f, casillas[i][j]->getColor() ? 0.0f : 1.0f);
-                    glRasterPos2f(j + 0.4f, i + 0.4f); //posicion texto
-                    //dibuja la inicial de cada tipo de pieza
                     string tipo = casillas[i][j]->getTipo();
-                    glutBitmapCharacter(GLUT_BITMAP_HELVETICA_18, tipo[0]);
+                    bool color = casillas[i][j]->getColor();
+
+                    if (color == 1) // piezas blancas
+                    {
+                        if (tipo == "Peon")
+                            imprimirTextura("imagenes/timon.png", j, i);
+
+                        else if (tipo == "Alfil")
+                            imprimirTextura("imagenes/rafiki.png", j, i);
+
+                        else if (tipo == "Caballo")
+                            imprimirTextura("imagenes/pumba.png", j, i);
+
+                        else if (tipo == "Queen")
+                            imprimirTextura("imagenes/nala.png", j, i);
+
+                        else if (tipo == "Rey")
+                            imprimirTextura("imagenes/simba1.png", j, i);
+
+                        else if (tipo == "Torre")
+                            imprimirTextura("imagenes/zazu.png", j, i);
+
+                    }
+
+                    if (color == 0) //piezas negras
+                    {
+                        if (tipo == "Peon")
+                            imprimirTextura("imagenes/hyena.png", j, i);
+
+                        else if (tipo == "Alfil")
+                            imprimirTextura("imagenes/nuka.png", j, i);
+
+                        else if (tipo == "Caballo")
+                            imprimirTextura("imagenes/kovu.png", j, i);
+
+                        else if (tipo == "Queen")
+                            imprimirTextura("imagenes/zira.png", j, i);
+
+                        else if (tipo == "Rey")
+                            imprimirTextura("imagenes/scar.png", j, i);
+
+                        else if (tipo == "Torre")
+                            imprimirTextura("imagenes/vitani.png", j, i);
+
+                    }
 
                 }
 
                 else if (s2 == 3) //MODO ETSIDI
                 {
-                    //color de las piezas (las blancas en rojo y las negras en azul)
-                    glColor3f(casillas[i][j]->getColor() ? 1.0f : 0.0f, 0.0f, casillas[i][j]->getColor() ? 0.0f : 1.0f);
-                    glRasterPos2f(j + 0.4f, i + 0.4f); //posicion texto
-                    //dibuja la inicial de cada tipo de pieza
+
                     string tipo = casillas[i][j]->getTipo();
-                    glutBitmapCharacter(GLUT_BITMAP_HELVETICA_18, tipo[0]);
+                    bool color = casillas[i][j]->getColor();
+
+                    if (color == 1) // piezas blancas
+                    {
+                        if (tipo == "Peon")
+                            imprimirTextura("imagenes/etsidipawnwhite.png", j, i);
+
+                        else if (tipo == "Alfil")
+                            imprimirTextura("imagenes/etsidibishopwhite.png", j, i);
+
+                        else if (tipo == "Caballo")
+                            imprimirTextura("imagenes/etsidihorsewhite.png", j, i);
+
+                        else if (tipo == "Queen")
+                            imprimirTextura("imagenes/etsidiqueenwhite.png", j, i);
+
+                        else if (tipo == "Rey")
+                            imprimirTextura("imagenes/etsidikingwhite.png", j, i);
+
+                        else if (tipo == "Torre")
+                            imprimirTextura("imagenes/etsiditowerwhite.png", j, i);
+
+                    }
+
+                    if (color == 0) //piezas negras
+                    {
+                        if (tipo == "Peon")
+                            imprimirTextura("imagenes/etsidipawnblack.png", j, i);
+
+                        else if (tipo == "Alfil")
+                            imprimirTextura("imagenes/etsidibishopblack.png", j, i);
+
+                        else if (tipo == "Caballo")
+                            imprimirTextura("imagenes/etsidihorseblack.png", j, i);
+
+                        else if (tipo == "Queen")
+                            imprimirTextura("imagenes/etsidiqueenblack.png", j, i);
+
+                        else if (tipo == "Rey")
+                            imprimirTextura("imagenes/etsidikingblack.png", j, i);
+
+                        else if (tipo == "Torre")
+                            imprimirTextura("imagenes/etsiditowerblack.png", j, i);
+
+                    }
                 }
 
             }
         }
     }
+}
+
+void Tablero::imprimirTextura(const std::string& ruta, int x, int y) 
+{
+    
+    auto tex = ETSIDI::getTexture(ruta.c_str());
+
+    if (tex.id == 0) {
+        std::cerr << "No se pudo cargar la textura: " << ruta << std::endl;
+        return;
+    }
+
+    glEnable(GL_TEXTURE_2D);
+    glDisable(GL_LIGHTING);
+    glBindTexture(GL_TEXTURE_2D, tex.id);
+    
+    if ((x + y) % 2 == 0) //si es par imprime la casilla de un color claro
+    {
+        glColor3f(0.82f, 0.729f, 0.647f); // Este es el marron claro   
+
+    }
+    else //si no en un color oscuro
+    {
+        glColor3f(0.694f, 0.47f, 0.329f); //marron oscuro
+    }
+    
+    glBegin(GL_QUADS);
+    glTexCoord2f(0, 0); glVertex3f(x, y, 0.1f);
+    glTexCoord2f(1, 0); glVertex3f(x + 1, y, 0.1f);
+    glTexCoord2f(1, 1); glVertex3f(x + 1, y + 1, 0.1f);
+    glTexCoord2f(0, 1); glVertex3f(x, y + 1, 0.1f);
+    glEnd();
+
+}
+
+void Tablero::pintarmovimiento(float r, float g, float b, int i, int j){
+    glColor3f(r, g, b); //
+    glLineWidth(10.0f); // más grueso para que se note
+    glBegin(GL_LINE_LOOP);
+    glVertex2f(j, i);
+    glVertex2f(j + 1, i);
+    glVertex2f(j + 1, i + 1);
+    glVertex2f(j, i + 1);
+    glEnd();
+    glLineWidth(1.0f); // restaurar grosor
 }
 
 EstadoJuego Tablero::click(float x, float y, int s1)
@@ -187,6 +364,7 @@ EstadoJuego Tablero::click(float x, float y, int s1)
 
             if (esJaqueMate(!turnoBlancas))
             {
+                ETSIDI::play("sonidos/Checkmate.mp3");
 
                 if (turnoBlancas)
                     cout << "\t\t\tRey negro en Jaque Mate. Ganan blancas. Pulse r para volver al menu inicial" << endl;
@@ -454,6 +632,7 @@ EstadoJuego Tablero::moverIA() {
     std::cout << "IA mueve " << casillas[x][y]->getTipo() << " negro de (" << i << "," << j << ") a (" << x << "," << y << ")\n";
     if (esJaqueMate(turnoBlancas))
     {
+        ETSIDI::play("sonidos/Checkmate.mp3");
         cout << "Rey blanco en Jaque Mate. Ganan negras. Pulse r para volver al menu inicial" << endl;
         return JAQUE_MATE;
     }
