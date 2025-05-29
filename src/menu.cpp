@@ -73,7 +73,7 @@ Boton botonesTipo[3] = {
 
 Boton botonesModos[2] = {
     {-0.6f, 0.2f, 1.2f, 0.2f, "    1.  BABY"},
-    {-0.6f, -0.1f, 1.2f, 0.2f, "    2.  GARDEN"}
+    {-0.6f, -0.1f, 1.2f, 0.2f, "    2.  GARDNER"}
 };
 
 void mostrarMenu() {
