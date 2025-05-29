@@ -59,47 +59,6 @@ void dibujar(float r, float g, float b) {
 }
 };
 
-void mostrarMenu() {
-    glClear(GL_COLOR_BUFFER_BIT);
-
-    // 1. Proyección centrada (para -1.0 a 1.0)
-    glMatrixMode(GL_PROJECTION);
-    glLoadIdentity();
-    gluOrtho2D(-1.0, 1.0, -1.0, 1.0);  // sistema de coordenadas usado en los botones
-    glMatrixMode(GL_MODELVIEW);
-    glLoadIdentity();
-
-    // 2. Dibujar imagen de fondo
-    glEnable(GL_TEXTURE_2D);
-    glBindTexture(GL_TEXTURE_2D, ETSIDI::getTexture("imagenes/FondoAjedrez.png").id);
-    glDisable(GL_LIGHTING);  // desactivar luz para evitar efectos raros
-
-    glBegin(GL_QUADS);
-    glColor3f(1.0f, 1.0f, 1.0f); // sin tinte
-    glTexCoord2f(0, 1); glVertex2f(-1.0f, -1.0f); // abajo izquierda
-    glTexCoord2f(1, 1); glVertex2f(1.0f, -1.0f);  // abajo derecha
-    glTexCoord2f(1, 0); glVertex2f(1.0f, 1.0f);   // arriba derecha
-    glTexCoord2f(0, 0); glVertex2f(-1.0f, 1.0f);  // arriba izquierda
-    glEnd();
-
-    glDisable(GL_TEXTURE_2D);
-    glEnable(GL_LIGHTING);  // opcional si usarás luz luego
-
-    // 3. Título con sombra
-    /*glColor3f(0.0f, 0.0f, 0.0f);  // sombra negra
-    glRasterPos2f(-0.53f, 0.72f);
-    const char* sombra = "       Ajedrez - El Rey Peon";
-    for (const char* c = sombra; *c; ++c)
-        glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_24, *c);*/
-
-    glColor3f(1.0f, 1.0f, 0.6f);  // texto claro
-    glRasterPos2f(-0.32f, 0.75f);
-    const char* titulo = "AJEDREZ - EL REY PEON";
-    for (const char* c = titulo; *c; ++c)
-        glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_24, *c);
-
-}
-
 Boton botones[3] = {
     {-0.6f, 0.2f, 1.2f, 0.2f, "1. Jugador vs Maquina"},
     {-0.6f, -0.1f, 1.2f, 0.2f, "2. Jugador vs Jugador"},
@@ -116,6 +75,46 @@ Boton botonesModos[2] = {
     {-0.6f, 0.2f, 1.2f, 0.2f, "    1.  BABY"},
     {-0.6f, -0.1f, 1.2f, 0.2f, "    2.  GARDEN"}
 };
+
+void mostrarMenu() {
+    glClear(GL_COLOR_BUFFER_BIT);
+
+    // 1. Proyección centrada (para -1.0 a 1.0)
+    glMatrixMode(GL_PROJECTION);
+    glLoadIdentity();
+    gluOrtho2D(-1.0, 1.0, -1.0, 1.0);  // sistema de coordenadas de los botones
+    glMatrixMode(GL_MODELVIEW);
+    glLoadIdentity();
+
+    // 2. Dibujar imagen de fondo
+    glEnable(GL_TEXTURE_2D);
+    glBindTexture(GL_TEXTURE_2D, ETSIDI::getTexture("imagenes/FondoAjedrez.png").id);
+    glDisable(GL_LIGHTING);  // desactivar luz para evitar efectos raros
+
+    glBegin(GL_QUADS);
+    glColor3f(1.0f, 1.0f, 1.0f); // sin color
+    glTexCoord2f(0, 1); glVertex2f(-1.0f, -1.0f); // abajo izquierda
+    glTexCoord2f(1, 1); glVertex2f(1.0f, -1.0f);  // abajo derecha
+    glTexCoord2f(1, 0); glVertex2f(1.0f, 1.0f);   // arriba derecha
+    glTexCoord2f(0, 0); glVertex2f(-1.0f, 1.0f);  // arriba izquierda
+    glEnd();
+
+    glDisable(GL_TEXTURE_2D);
+    glEnable(GL_LIGHTING);  // opcional si usarás luz luego
+
+    glColor3f(1.0f, 1.0f, 0.6f);  // texto claro
+    glRasterPos2f(-0.32f, 0.75f);
+    const char* titulo = "AJEDREZ - EL REY PEON";
+    for (const char* c = titulo; *c; ++c)
+        glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_24, *c);
+
+    glDisable(GL_TEXTURE_2D);
+    botones[0].dibujar(0.0f, 0.6f, 0.8f); // azul clarito
+    botones[1].dibujar(0.3f, 0.8f, 0.3f); // verde
+
+    glFlush();
+}
+
 
 void mostrarMenuTipo() {
     glClear(GL_COLOR_BUFFER_BIT);
@@ -143,20 +142,20 @@ void mostrarMenuTipo() {
     glDisable(GL_TEXTURE_2D);
     glEnable(GL_LIGHTING);
 
-    // 3. Título del menú
-    /*glColor3f(0.0f, 0.0f, 0.0f);  // sombra negra
-    glRasterPos2f(-0.3f, 0.72f);
-    const char* sombra = "Selecciona Tipo de Juego";
-    for (const char* c = sombra; *c; ++c)
-        glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_24, *c);*/
-
     glColor3f(1.0f, 1.0f, 0.6f);  // texto claro
     glRasterPos2f(-0.32f, 0.75f);
     const char* titulo = "Selecciona Tipo de Juego";
     for (const char* c = titulo; *c; ++c)
         glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_24, *c);
 
+    // Boton 1
+     botonesTipo[0].dibujar(0.0f, 0.6f, 0.8f); // azul clarito
+     // Boton 2
+     botonesTipo[1].dibujar(0.3f, 0.8f, 0.3f); // verde
+     // Boton 3
+     botonesTipo[2].dibujar(0.8f, 0.2f, 0.2f); // rojo
 
+ glFlush();
 }
 void mostrarMenuModo() {
     glClear(GL_COLOR_BUFFER_BIT);
@@ -184,18 +183,18 @@ void mostrarMenuModo() {
     glDisable(GL_TEXTURE_2D);
     glEnable(GL_LIGHTING);
 
-    // 3. Título del menú
-    /*glColor3f(0.0f, 0.0f, 0.0f);  // sombra negra
-    glRasterPos2f(-0.3f, 0.72f);
-    const char* sombra = "Selecciona Modo de juego:";
-    for (const char* c = sombra; *c; ++c)
-        glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_24, *c);*/
-
     glColor3f(1.0f, 1.0f, 0.6f);  // texto claro
     glRasterPos2f(-0.32f, 0.75f);
     const char* titulo = "Selecciona Modo de juego";
     for (const char* c = titulo; *c; ++c)
         glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_24, *c);
+
+    // Boton Modo 1
+    botonesModos[0].dibujar(0.0f, 0.6f, 0.8f); // azul cielo
+    // Boton Modo 2
+    botonesModos[1].dibujar(0.3f, 0.8f, 0.3f); // verde
+
+glFlush();
 
 }
 void Menu::render() {
